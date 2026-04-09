@@ -9,7 +9,7 @@ struct node {
 void display(struct node *start);
 struct node *create_list(struct node *start);
 // void search(struct node *start, int data);
-// void *delete(struct node *start, int data);
+void *delete(struct node *start, int data);
 // void count(struct node *start);
 struct node *append(struct node *start, int data);
 struct node *topup(struct node *start, int data);
@@ -19,6 +19,7 @@ int main(void) {
 	int choice, data, item, pos;
 
 	while (1) {
+		printf("\n");
 		printf("1. Create List\n");
 		printf("2. Display\n");
 		printf("3. Count\n");
@@ -49,17 +50,17 @@ int main(void) {
 		case 5:
 			printf("Enter a value at the list's beginning: ");
 			scanf("%d", &data);
-			topup(start, data);
+			start = topup(start, data);
 			break;
 		case 6:
 			printf("Enter a value at the list's ending: ");
 			scanf("%d", &data);
-			append(start, data);
+			start = append(start, data);
 			break;
 		case 7:
 			printf("Enter data to delete: ");
 			scanf("%d", &data);
-			// delete (start, data);
+			start = delete (start, data);
 			break;
 		case 8:
 			exit(EXIT_SUCCESS);
@@ -83,7 +84,7 @@ void display(struct node *start) {
 		printf("%d ", p->info);
 		p = p->link;
 	}
-	printf("\n\n");
+	printf("\n");
 }
 
 struct node *topup(struct node *start, int data) {
@@ -126,3 +127,30 @@ struct node *create_list(struct node *start) {
 	}
 	return start;
 }
+
+void *delete(struct node *start, int data) {
+	struct node *tmp, *p;
+	if (start == NULL) {
+		printf("List is empty right now\n");
+		return start;
+	}
+	if(start->info == data) {
+		tmp = start;
+		start = tmp->link;
+		free(tmp);
+		return start;
+	}
+	p = start;
+	while(p->link!=NULL){
+		if(p->link->info == data){
+			tmp = p->link;
+			p->link = tmp->link;
+			free(tmp);
+			return start;
+		}
+		p = p->link;
+	}
+	printf("Entered data %d not found in the list\n", data);
+	return start;
+}
+
